@@ -3,12 +3,11 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)  # ✅ 啟用跨來源請求支援（CORS）
+CORS(app)  # ✅ 啟用跨來源支援
 
 def check_conflict(x_num, seq):
     seq = [seq[i] + x_num * i for i in range(len(seq))]
     n_of_conflict = 0
-
     for i in range(x_num):
         for j in range(x_num):
             x = seq[i]
@@ -50,11 +49,11 @@ def check_queens():
     seq = data.get("seq")
 
     if not isinstance(x_num, int) or not isinstance(seq, list):
-        return jsonify({"error": "請提供正確的 x_num（整數）與 seq（整數陣列）"}), 400
+        return jsonify({"error": "x_num 必須是整數，seq 必須是整數陣列"}), 400
 
     conflict = check_conflict(x_num, seq)
     return jsonify({"conflict": conflict})
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
+    port = int(os.environ.get("PORT", 10000))  # ✅ Render 會用 PORT 環境變數
     app.run(host="0.0.0.0", port=port)
