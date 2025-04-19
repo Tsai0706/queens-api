@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+import os
 
 app = Flask(__name__)
+CORS(app)  # ✅ 啟用跨來源請求支援（CORS）
 
 def check_conflict(x_num, seq):
     seq = [seq[i] + x_num * i for i in range(len(seq))]
@@ -49,13 +50,11 @@ def check_queens():
     seq = data.get("seq")
 
     if not isinstance(x_num, int) or not isinstance(seq, list):
-        return jsonify({"error": " п J   Ī  x_num ]  ơ^ P seq ]  ư} C ^"}), 400
+        return jsonify({"error": "請提供正確的 x_num（整數）與 seq（整數陣列）"}), 400
 
     conflict = check_conflict(x_num, seq)
     return jsonify({"conflict": conflict})
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
-app = Flask(__name__)
-CORS(app)  # ✅ 啟用跨來源請求支援（CORS）
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
